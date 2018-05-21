@@ -13,6 +13,9 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
+const themePath = require(paths.appPackageJson).theme;
+const themeObj = themePath ? JSON.parse(fs.readFileSync(themePath, 'utf-8')) : {};
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -151,6 +154,8 @@ module.exports = {
                         options: {
 
                             compact: true,
+                            // antd style
+                            plugins: [["import", {"libraryName": "antd", "style": true}]]
                         },
                     },
                     // The notation here is somewhat confusing.
@@ -166,7 +171,7 @@ module.exports = {
                     // use the "style" loader inside the async code so CSS from them won't be
                     // in the main CSS file.
                     {
-                        test: /\.css$/,
+                        test: /\.(css|less)$/,
                         loader: ExtractTextPlugin.extract(
                             Object.assign(
                                 {
@@ -206,6 +211,15 @@ module.exports = {
                                                 ],
                                             },
                                         },
+                                        // compiles Less to CSS
+                                        {
+                                            loader: require.resolve('less-loader'),
+                                            options: {
+                                                javascriptEnabled: true,
+                                                // antd theme
+                                                modifyVars: themeObj, //{"primary-color": "#1DA57A"},
+                                            }
+                                        }
                                     ],
                                 },
                                 extractTextPluginOptions

@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
+import {Button} from 'antd';
+
 import './index.css';
 import logo from './logo.svg';
 
@@ -25,6 +27,16 @@ export default class Home extends React.Component {
                     <li>
                         <Link to="/author">Author</Link>
                     </li>
+                    <li>
+                        <Link to="/login">Login</Link>
+                    </li>
+                    <li>
+                        <Link to="/side">Side</Link>
+                    </li>
+                    <Button type="primary">Primary</Button>
+                    <Button>Default</Button>
+                    <Button type="dashed">Dashed</Button>
+                    <Button type="danger">Danger</Button>
                 </ul>
             </div>
         )

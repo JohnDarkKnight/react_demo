@@ -2,6 +2,7 @@
 
 const autoprefixer = require('autoprefixer');
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -11,6 +12,9 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+
+const themePath = require(paths.appPackageJson).theme;
+const themeObj = themePath ? JSON.parse(fs.readFileSync(themePath, 'utf-8')) : {};
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -149,6 +153,8 @@ module.exports = {
                             // It enables caching results in ./node_modules/.cache/babel-loader/
                             // directory for faster rebuilds.
                             cacheDirectory: true,
+                            // antd style
+                            plugins: [["import", {"libraryName": "antd", "style": true}]]
                         },
                     },
                     // "postcss" loader applies autoprefixer to our CSS.
@@ -157,7 +163,7 @@ module.exports = {
                     // In production, we use a plugin to extract that CSS to a file, but
                     // in development "style" loader enables hot editing of CSS.
                     {
-                        test: /\.css$/,
+                        test: [/\.css$/, /\.less$/],
                         use: [
                             require.resolve('style-loader'),
                             {
@@ -187,6 +193,15 @@ module.exports = {
                                     ],
                                 },
                             },
+                            // compiles Less to CSS
+                            {
+                                loader: require.resolve('less-loader'),
+                                options: {
+                                    javascriptEnabled: true,
+                                    // antd theme
+                                    modifyVars: themeObj, //{"primary-color": "#1DA57A"},
+                                }
+                            }
                         ],
                     },
                     // "file" loader makes sure those assets get served by WebpackDevServer.
@@ -261,3 +276,4 @@ module.exports = {
         hints: false,
     },
 };
+
