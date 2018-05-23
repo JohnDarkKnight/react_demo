@@ -1,10 +1,11 @@
 import React from 'react'
+import ErrorPage from '../Error';
 
 const DelayLoading = ({pastDelay, error}) => {
     if (pastDelay) {
         return <div>Loading...</div>
     } else if (error) {
-        return <div>Sorry, there was a problem loading the page.</div>;
+        return <ErrorPage/>
     } else {
         return null;
     }

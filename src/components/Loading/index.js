@@ -1,34 +1,26 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import {inject, observer} from 'mobx-react'
-import {Spin} from 'antd'
+import {observer} from 'mobx-react'
+import {Spin} from 'antd';
+import PropTypes from 'prop-types';
 import './index.less'
 
 @withRouter
-@inject('LoginStore')
 @observer
 class Loading extends Component {
-    componentDidUpdate() {
-        if (this.props.LoginStore.loading) {
-            setTimeout(() => {
-                this.props.Store.LoginStore.updateLoading(false)
-            }, 500);
-        }
-    }
 
-    componentWillReceiveProps() {
-        this.props.LoginStore.updateLoading(true)
-    }
+    static propTypes = {
+        loading: PropTypes.bool,
+    };
 
-    shouldComponentUpdate(nextProps) {
-        if (this.props.location.pathname !== nextProps.location.pathname) {
-            return true;
-        }
-    }
+    static  defaultProps = {
+        loading: false,
+    };
 
     render() {
+        const {loading} = this.props;
         return (
-            <Spin tip='LOADING' wrapperClassName='Loading_wrap' spinning={this.props.LoginStore.loading}>
+            <Spin tip='LOADING' wrapperClassName='Loading_wrap' spinning={loading}>
                 {this.props.children}
             </Spin>
         )

@@ -23,7 +23,8 @@ class SideMenu extends Component {
     }
 
     onSelect = ({key}) => {
-        this.props.history.push(key)
+        console.log('key', key);
+        this.props.history.push(key);
     };
 
     componentWillReceiveProps(nextProps) {
@@ -33,9 +34,16 @@ class SideMenu extends Component {
     }
 
     render() {
+        console.log('menuConfig', menuConfig);
         return (
             <div className='SideMenu_wrap'>
-                <Menu mode="inline" theme="dark" onSelect={this.onSelect} selectedKeys={this.state.keys}>
+                <Menu
+                    mode="inline"
+                    theme="dark"
+                    onSelect={this.onSelect}
+                    selectedKeys={this.state.keys}
+                    defaultSelectedKeys={['/home']}
+                >
                     {
                         menuConfig.map((item, i) =>
                             item.list && item.list.length > 0 ?

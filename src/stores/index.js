@@ -1,7 +1,7 @@
-import LoginStore from './loginStore';
+import LoadingStore from './loadingStore';
 import UserStore from './userStore';
 
 export default {
-    LoginStore,
+    LoadingStore,
     UserStore,
 };

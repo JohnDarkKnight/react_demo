@@ -6,7 +6,7 @@ const Left = () => {
     return (
         <div className='left'>
             <div className='logo'>
-                <img src={logo}/>
+                <img src={logo} alt='react-mobX'/>
             </div>
             <SideMenu/>
         </div>

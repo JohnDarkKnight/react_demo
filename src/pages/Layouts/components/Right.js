@@ -1,17 +1,21 @@
-import React, {Component} from 'react'
-import {Route, withRouter} from 'react-router-dom'
-import {observer, inject} from 'mobx-react'
-import {Tooltip} from 'antd'
-import routerConfig from '../../../config/routes'
-import Cookies from 'js-cookie'
-import Loading from '../../../components/Loading'
+import React, {Component} from 'react';
+import {Route, withRouter, Switch} from 'react-router-dom';
+import {observer, inject} from 'mobx-react';
+import {Tooltip} from 'antd';
+import Cookies from 'js-cookie';
+import Loading from '../../../components/Loading';
+import {RightRoute} from '../../../config/route';
 
 @withRouter
 @inject('UserStore')
 @observer
 class Right extends Component {
+
+    state = {
+        isLoading: false,
+    };
+
     componentWillMount() {
-        console.log('this.props', this.props);
         let {userInfo, updateName} = this.props.UserStore;
         if (userInfo.name === null) {
             updateName(Cookies.get('userName'));
@@ -24,6 +28,7 @@ class Right extends Component {
 
     render() {
         const {name} = this.props.UserStore.userInfo;
+        const {isLoading} = this.state;
         return (
             <div className='right'>
                 <div className='header clear clearFix'>
@@ -36,10 +41,10 @@ class Right extends Component {
                     </div>
                 </div>
                 <div className='routeWrap'>
-                    <Loading>
-                        {routerConfig.map((item, i) =>
-                            <Route key={i} path={item.path} component={item.component} exact/>
-                        )}
+                    <Loading loading={isLoading}>
+                        <Switch>
+                            {RightRoute.map((item, i) => <Route key={i} {...item}/>)}
+                        </Switch>
                     </Loading>
                 </div>
             </div>

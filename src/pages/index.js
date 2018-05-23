@@ -3,16 +3,17 @@ import {Provider} from 'mobx-react';
 import Cookies from 'js-cookie';
 import {Route, Switch, withRouter} from 'react-router-dom';
 
-import Login from './Login';
-import Layouts from './Layouts';
+import {PageIndexRoute} from '../config/route';
 
 import stores from '../stores';
 
 @withRouter
 export default class Pages extends Component {
 
+    pathname = this.props.location.pathname;
+
     _checkSessionID = () => {
-        if (this.props.location.pathname !== '/login') {
+        if (this.pathname !== '/login') {
             if (!Cookies.get('JSESSIONID')) {
                 this.props.history.replace('/login');
             }
@@ -35,16 +36,15 @@ export default class Pages extends Component {
         }
     }
 
-    componentWillReceiveProps() {
-        this._checkSessionID();
+    componentDidCatch() {
+        this.props.history.replace('/error');
     }
 
     render() {
         return (
             <Provider {...stores}>
                 <Switch>
-                    <Route path="/login" component={Login}/>
-                    <Route path='/' component={Layouts}/>
+                    {PageIndexRoute.map((item, index) => <Route key={index} {...item}/>)}
                 </Switch>
             </Provider>
         )

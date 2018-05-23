@@ -7,17 +7,16 @@ import Cookies from 'js-cookie';
 import LoginForm from './form';
 import './index.less';
 
-@inject('LoginStore')
-@inject('UserStore')
+@inject('UserStore', 'LoadingStore')
 @observer
 export default class Login extends Component {
 
-    store = new this.props.LoginStore(); // 在这里实例化，保证每次加载组件数据的初始化。
+    store = new this.props.LoadingStore(); // 在这里实例化，保证每次加载组件数据的初始化。
 
     componentWillUnmount() {
         this.timer && clearTimeout(this.timer);
     }
-
+    
     _onSubmit = (form, updateLoading) => {
         form.validateFields((err, values) => {
             if (!err) {
@@ -36,7 +35,7 @@ export default class Login extends Component {
                     } else {
                         message.error('账号：admin ； 密码：123456')
                     }
-                }, 1500)
+                }, 1500);
             }
         });
     };
