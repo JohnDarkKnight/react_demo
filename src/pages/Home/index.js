@@ -1,10 +1,27 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {login} from '../../components/Axios';
+
+import {Button, WhiteSpace} from 'antd-mobile';
 
 import './index.css';
 import logo from './logo.svg';
 
 export default class Home extends React.Component {
+
+    _onClick = async () => {
+        try {
+            const params = {
+                username: 'admin',
+                password: '123456',
+                mobileLogin: true,
+            };
+            const result = await login(params);
+
+        } catch (error) {
+        }
+    };
+
     render() {
         return (
             <div className='App'>
@@ -25,7 +42,24 @@ export default class Home extends React.Component {
                     <li>
                         <Link to="/author">Author</Link>
                     </li>
+                    <Button type="ghost" size="small" inline>small</Button>
+                    <Button
+                        icon={<img src="https://gw.alipayobjects.com/zos/rmsportal/jBfVSpDwPbitsABtDDlB.svg"
+                                   alt="哈喽"/>}>
+                        with custom icon
+                    </Button>
+                    <WhiteSpace/>
+                    <Button
+                        type="ghost"
+                        inline
+                        onClick={this._onClick}
+                        style={{marginRight: '4px'}}
+                        className="am-button-borderfix">
+                        inline ghost
+                    </Button>
+
                 </ul>
+
             </div>
         )
     }

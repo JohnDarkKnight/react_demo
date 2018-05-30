@@ -6,6 +6,7 @@ export default class Loading extends React.Component {
         if (isLoading) {
             return <div>Loading...</div>;
         } else if (error) {
+            console.log('errpr', error);
             return <div>Sorry, there was a problem loading the page.</div>;
         } else {
             return null;
