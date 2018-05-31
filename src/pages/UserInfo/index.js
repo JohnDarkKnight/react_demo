@@ -12,13 +12,14 @@ export default class Home extends React.Component {
     _onClick = async () => {
         try {
             const params = {
-                username: 'admin',
+                username: 'xiehongchun',
                 password: '123456',
                 mobileLogin: true,
             };
             const result = await login(params);
-
+            console.log('login result', result);
         } catch (error) {
+            console.log('login error', error);
         }
     };
 

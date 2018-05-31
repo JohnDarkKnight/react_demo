@@ -5,7 +5,7 @@ const apis = (config => {
     });
     return config;
 })({
-    login: '/logibn',
+    login: '/login',
 });
 
 export default apis;

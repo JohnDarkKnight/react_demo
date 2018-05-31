@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {Toast} from 'antd-mobile';
 
 const DevUrl = 'http://192.168.2.79:9090';       // 开发http请求地址
 const ProUrl = '';                               // 正式包http请求地址
@@ -6,12 +7,23 @@ const ProUrl = '';                               // 正式包http请求地址
 let url = null;
 const errMsg = '请求服务异常';
 
-if (process.env.NODE_ENV === 'development') {
-    url = DevUrl;
-} else if (process.env.NODE_ENV === 'test') {
-    url = DevUrl;
-} else if (process.env.NODE_ENV === 'production') {
-    url = ProUrl;
+const NODE_ENV = ['development', 'production'];
+let env = null;
+
+switch (process.env.NODE_ENV) {
+    case 'development':
+    case  'test':
+        url = DevUrl;
+        env = NODE_ENV[0];
+        break;
+    case 'production':
+        url = ProUrl;
+        env = NODE_ENV[1];
+        break;
+    default:
+        url = ProUrl;
+        env = NODE_ENV[1];
+        break;
 }
 
 axios.defaults.baseURL = url;
@@ -30,6 +42,13 @@ const removePending = (config) => {
     }
 };
 
+function _onHandleError(error) {
+    Toast.fail(errMsg, 1.5);
+    if (env === NODE_ENV[0]) {
+        throw new Error(error);
+    }
+}
+
 axios.interceptors.request.use(config => {
     removePending(config);
     config.cancelToken = new cancelToken((func) => {
@@ -39,6 +58,8 @@ axios.interceptors.request.use(config => {
         ...config.headers
     };
     return config;
+}, error => {
+    _onHandleError(error);
 });
 
 axios.interceptors.response.use(response => {
@@ -52,6 +73,8 @@ axios.interceptors.response.use(response => {
         // 非200请求报错
         throw new Error(status, data, errMsg);
     }
+}, error => {
+    _onHandleError(error);
 });
 
 const http = {};
